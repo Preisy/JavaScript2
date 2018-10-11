@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <style media="screen">
+      .wrap {
+        position: relative;
+      }
+      .user.mb-4.card.card-body {
+        transform: translate3d(-1.25rem, -1.25rem, -1.25rem);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 10;
+      }
+    </style>
+</head>
+<body>
+<div class="container mt-4">
+    <form id="messageForm">
+        <div class="form-group">
+            <label for="message">Введите сообщение</label>
+            <input type="text" class="form-control" id="message" placeholder="Введите сообщение">
+        </div>
+        <button type="submit" class="btn btn-primary">Отправить</button>
+    </form>
+    <div class="card mt-4">
+        <div class="card-body">
+            <p class="card-text"></p>
+        </div>
+    </div>
+    <div class="card mt-4">
+        <div class="card-body users">
+
+        </div>
+    </div>
+</div>
+<script>
+const BASE_URL = 'http://89.108.65.123';
+const messageText = document.querySelector('.card-text');
+const userText = document.querySelector('.card-body.users');
+const form = document.querySelector('#messageForm');
+const messageInput = document.querySelector('#message');
+var text = '';
+var username;
+
+const getMessage = () => {
+  fetch(`${BASE_URL}/getMessage`).then((result) => {
+    return result.text();
+  }).then((text) => {
+    messageText.innerHTML = text
+  }).catch((error) => {
+    console.error(error);
+  })
+}
+
+const getUser = function(i) {
+  fetch(`${BASE_URL}/user/${i}`).then((result) => {
+    return result.text();
+  }).then((json) => {
+    var obj = JSON.parse(json);
+
+    createUserText(userText, obj.name, obj.email)
+    if (arguments[1]) userSetListeners()
+  }).catch((error) => {
+    console.error(error);
+  })
+}
+const getUserInfo = function(i) {
+  fetch(`${BASE_URL}/user/${i}`).then((result) => {
+    return result.text();
+  }).then((json) => {
+    var obj = JSON.parse(json);
+
+    var user = createUserText(username[i - 1], obj.name, obj.email, obj.age);
+    user.addEventListener('click', function() {
+      user.remove();
+    })
+  }).catch((error) => {
+    console.error(error);
+  })
+}
+function createUserText(parent, userName, userEmail, userAge) {
+  var user = document.createElement('div');
+  user.className = 'user mb-4';
+  var name = document.createElement('h3');
+  name.className = 'username';
+  name.innerText = userName;
+  user.appendChild(name)
+  var email = document.createElement('p');
+  email.innerText = userEmail;
+  user.appendChild(email)
+  if (userAge) {
+    var age = document.createElement('p');
+    user.className = 'user mb-4 card card-body';
+    age.innerText = ' age: ' + userAge;
+    user.appendChild(age)
+    parent.parentNode.parentNode.appendChild(user);
+    return user;
+  }
+  var wrap = document.createElement('div');
+  wrap.className = 'wrap';
+  wrap.appendChild(user)
+  parent.appendChild(wrap);
+  return wrap;
+}
+
+const userArr = function() {
+  fetch(`${BASE_URL}/user`).then((result) => {
+    return result.text()
+  }).then((json) => {
+    return users = JSON.parse(json)
+  }).catch((error) => {
+    console.error(error)
+  })
+}
+
+const sendMessage = (message) => {
+  fetch(`${BASE_URL}/sendMessage`, {
+    method: 'POST',
+    body: message
+  }).then(() => {
+    getMessage();
+  }).catch((error) => {
+    console.error(error);
+  })
+}
+
+getMessage()
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const message = messageInput.value;
+  sendMessage(message);
+})
+
+
+userArr()
+// не смог реализовать провервку на правильность значений в обьекте пользователя, так что если попадется "сломанный" user с хотя бы одним испорченным свойством - все полетит крахом
+for (let i = 1; i <= 3; i++) {
+  getUser(i, true);
+}
+
+function userSetListeners() {
+  let username = document.querySelectorAll('.username');
+  window.username = username;
+  username[username.length - 1].addEventListener('click', function() {
+    getUserInfo(username.length);
+  })
+}
+</script>
+</body>
+</html>
