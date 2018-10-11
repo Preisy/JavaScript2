@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>lesson_01</title>
+  <style>
+    .container {
+      display: -webkit-flex;
+      display: -ms-flex;
+      display: flex;
+      -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .container > div * {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .active-choice {
+      background-color: #a7a7a7;
+    }
+    .order {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div id="size">
+    Размер:
+    <button id="big" class="active-choice">Большой</button>
+    <button id="small">Маленький</button>
+  </div>
+  <div id="filling">
+    <button id="cheese" class="active-choice">Добавить сыр</button>
+    <button id="salad">Добавить салат</button>
+    <button id="potato">Добавить картофель</button>
+  </div>
+  <div id="add">
+    <button id="flavoring">посыпать перцем</button>
+    <button id="mayonnaise">полить майонезом</button>
+  </div>
+  <button id="cookBurger">Приготовить!</button>
+</div>
+<script>
+// Здесь немного не получилось ООП, но попытка - не пытка
+
+
+var settings = {
+  size: "big",
+  filling: "cheese",
+  add: false
+};
+var choiceButt = document.querySelectorAll('.container > div button');
+
+function Hamburger(size, filling, add) {
+  this.cost = 0;
+  this.calorie = 0;
+  this.size = size;
+  this.filling = filling;
+  this.add = add;
+  Hamburger.prototype.countOrder.call(this)
+}
+Hamburger.prototype.countOrder = function() {
+  if (this.size == "small") {
+    this.cost += 50;
+    this.calorie += 20;
+  } else if (this.size == "big") {
+    this.cost += 100;
+    this.calorie += 40;
+  }
+  if (this.filling == "cheese") {
+    this.cost += 10;
+    this.calorie += 20;
+  } else if (this.filling == "salad") {
+    this.cost += 20;
+    this.calorie += 5;
+  } else if (this.filling == "potato") {
+    this.cost += 15;
+    this.calorie += 10;
+  }
+  if (this.add == "flavoring" && this.add) {
+    this.cost += 15;
+    this.calorie += 0;
+  } else if (this.add == "mayonnaise" && this.add) {
+    this.cost += 20;
+    this.calorie += 5;
+  }
+}
+
+/**
+ * [Отвечает за выбор опций с помощью кнопок]
+ * @param  {number} let [счетчик кнопок, на которые назначается обработчик нажатия]
+ */
+for (let i = 0; i < choiceButt.length; i++) {
+
+  choiceButt[i].addEventListener('click', function() {
+    var prevActive = choiceButt[i].parentNode.querySelector('.active-choice');
+    // Расформировывает опции по группам
+    var type = choiceButt[i].parentNode.id;
+    if (prevActive == choiceButt[i]) {
+      prevActive.classList.remove("active-choice");
+      settings[type] = "отсутствует";
+      return;
+    } else if (choiceButt[i].parentNode.id == 'size') {
+      settings[type] = choiceButt[i].id;
+    } else if (choiceButt[i].parentNode.id == 'filling') {
+      settings[type] = choiceButt[i].id;
+    } else if (choiceButt[i].parentNode.id == 'add' ) {
+      settings[type] = choiceButt[i].id;
+    };
+
+    if (prevActive) {
+      prevActive.classList.remove("active-choice");
+    };
+    choiceButt[i].classList.add("active-choice");
+  })
+}
+
+cookBurger.addEventListener('click', cook)
+//
+function cook() {
+  // Создание поля заказа и проверка на отсутствие заказа
+  var order = document.createElement('div');
+  order.classList.add('order');
+  if (settings.size == "отсутствует" || settings.filling == "отсутствует") {
+    order.innerHTML = `Выберите значения!`;
+    document.body.appendChild(order);
+    return;
+  };
+
+  // Просчет значений и создание обьекта бургера
+  var burger = new Hamburger(settings.size, settings.filling, settings.add);
+  order.innerHTML = `Заказ: <br>
+    Размер: ${burger.size}<br>
+    Начинка: ${burger.filling}<br>
+    Дополнительное: ` + (burger.add || `отсутсвует`)
+     + `<br>Цена: ${burger.cost}<br>
+    Калории: ${burger.calorie}`;
+
+  document.body.appendChild(order);
+}
+</script>
+</body>
+</html>
