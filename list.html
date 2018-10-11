@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Lesson_01</title>
+</head>
+<body>
+<script>
+/**
+ * [Общий шаблон для всех элементов]
+ * @constructor
+ */
+function Container() {
+  this.id = "";
+  this.className= "";
+  this.htmlCode = "";
+}
+//
+function Menu(my_id, my_class, my_items) {
+  Container.call(this);
+  this.id = my_id;
+  this.className = my_class;
+  this.items = my_items;
+
+  this.ul = Menu.prototype.ul.call(this);
+}
+Menu.prototype = Object.create(Container.prototype);
+Menu.prototype.constructor = Menu;
+/**
+ * [создает пустой ul для menu или submenu]
+ * @return {Node} [Просто ul-обертка]
+ */
+Menu.prototype.ul = function() {
+  let node = document.createElement('ul');
+  node.className = this.className;
+  node.id = this.id;
+  return node
+}
+//
+function Submenu(my_id, my_class, my_subItems) {
+  Container.call(this);
+  this.id = my_id;
+  this.className = my_class;
+  this.items = my_subItems;
+
+  this.ul = Menu.prototype.ul.call(this);
+}
+Submenu.prototype = Object.create(Container.prototype);
+Submenu.prototype.constructor = Submenu;
+//
+function MenuItem(my_href, my_name) {
+  Container.call(this);
+  this.className = "menu-item";
+  this.href = my_href;
+  this.name = my_name;
+}
+MenuItem.prototype = Object.create(Container.prototype);
+MenuItem.prototype.constructor = MenuItem;
+MenuItem.prototype.render = function() {
+   let li = document.createElement('li');
+   li.className = this.className;
+   li.setAttribute('href', this.href);
+   li.innerText = this.name;
+   return li;
+}
+MenuItem.prototype.remove = function() {
+   this.li.remove();
+}
+//
+var m_item1 = new MenuItem("/", "Главная");
+var m_item2 = new MenuItem("/catalogue/", "Каталог");
+var m_item3 = new MenuItem("/gallery/", "Галерея");
+var m_items =[m_item1, m_item2, m_item3];
+
+var m_sub_item1 = new MenuItem("page_1", "Диваны");
+var m_sub_item2 = new MenuItem("page_2", "Кровати");
+var m_sub_item3 = new MenuItem("page_3", "Стулья");
+var m_subItems = [m_sub_item1, m_sub_item2, m_sub_item3];
+
+/**
+ * [Создаеm список]
+ * @return {Node} [Готовый ul]
+ */
+Menu.prototype.render = function(obj) {
+  for (var i = 0; i < obj.items.length; i++) {
+    if(obj.items[i] instanceof MenuItem) {
+      // console.log(obj);
+      obj.items[i].li = obj.items[i].render();
+      obj.ul.appendChild(obj.items[i].li);
+    }
+  }
+  return obj.ul;
+}
+
+var menu = new Menu("my_menu", "My_class", m_items);
+document.body.appendChild(menu.render(menu));
+var submenu = new Submenu("my_submenu", "My_subclass", m_subItems);
+menu.items[1].li.appendChild(menu.render(submenu));
+
+</script>
+</body>
+</html>
