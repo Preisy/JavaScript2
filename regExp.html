@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <style media="screen">
+    .container {
+      width: 60%;
+      margin: 0 auto;
+      font-size: 25px;
+      font-family: sans-serif;
+    }
+
+  </style>
+</head>
+<body>
+<div class="container">
+  <p class="mt-4">
+  'Lorem ipsum dolor sit amet, consectetur adipisicing elit', sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex aren't commodo consequat. 'Duis aute irure dolor' in reprehenderit in voluptate don't esse cillum dolore eu fugiat nulla pariatur. 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim' id est laborum.
+  </p>
+  <form class="pb-4" onsumbit="REG_EXP()">
+  <div class="form-group">
+    <label for="exampleInputEmail1">Name</label>
+    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter your name">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Phone</label>
+    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter your phone">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your phone with anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Message</label>
+    <textarea class="form-control" id="exampleInputPassword1" placeholder="Message" name="name" rows="8" cols="80"></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</div>
+
+<script>
+var p = document.querySelector('p');
+pText = ' ' + p.innerText;
+var prce = pText.replace(/(?=')'?(?<=\W)(?=\W)'?/g, '"')
+p.innerText = prce
+
+var inputError = true;
+var inputs = document.querySelectorAll('.form-group *:nth-child(2)')
+const REG_EXP = function() {
+  var inputError = true;
+  for (var i = 0; i < inputs.length; i++) {
+    inputs[i].style['border-color'] = '';
+  }
+  if (/[0-9]/.test(inputs[0].value)) {
+    inputs[0].style['border-color'] = 'red';
+    inputError = false;
+  }
+  if (!(/\+\d\(\d{3}\)\d{3}\-\d{4}/.test(inputs[1].value))) {
+    inputs[1].style['border-color'] = 'red';
+    inputError = false;
+  }
+  if (!(/.*@.*\.(com|ru)/i.test(inputs[2].value))) {
+    inputs[2].style['border-color'] = 'red';
+    inputError = false;
+  }
+  if(!inputError) {
+    event.preventDefault()
+    return inputError
+  }
+}
+document.querySelector('button[type="submit"]').addEventListener('click', REG_EXP)
+</script>
+</body>
+</html>
