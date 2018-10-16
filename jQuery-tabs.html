@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <style media="screen">
+  .content {
+    border: 1px solid #dee2e6;
+    margin-top: -1px;
+    display: none;
+  }
+  .content.active {
+    display: block;
+  }
+  </style>
+</head>
+<body>
+<div class="container mt-4">
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link active" href="#">Active</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Disabled</a>
+    </li>
+  </ul>
+  <div class="content active">
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem sunt neque eos, ipsa ratione officia illum natus, quos vitae a distinctio eligendi voluptates nobis incidunt mollitia culpa. Voluptatum magni, similique a, beatae veniam necessitatibus quam ullam! Excepturi atque qui, voluptatum. Maxime possimus ut numquam atque voluptas inventore non incidunt, perspiciatis eos, quia facere iure similique, tempore distinctio iste, quod asperiores vitae aperiam dolore soluta saepe ab. Tempora quaerat sunt eius cumque, ad, obcaecati commodi consequuntur suscipit, consectetur, doloribus aliquid alias. In non architecto suscipit incidunt nisi, magni dolorum rem repellendus animi ea rerum eum qui dolor. Saepe, explicabo. Repellat, quasi, iure fugit consectetur delectus odio, ipsa exercitationem officiis enim harum similique officia sit, beatae iusto expedita est. Dolores aspernatur quaerat, dignissimos accusantium? Asperiores tempora id nobis saepe facere ducimus neque, officiis fugit voluptatem eos, vero, culpa, consequuntur dolores atque natus quidem reprehenderit delectus! Voluptates et sunt, quae veritatis tenetur voluptatum blanditiis, repellendus rerum tempora nostrum pariatur magnam maxime, cumque magni natus. Earum molestias ut eligendi neque officiis consequuntur, nam voluptate ab. Doloribus soluta fuga, mollitia quibusdam consequatur quaerat amet suscipit laudantium minus provident sit ipsum sunt dolor, corporis molestias nisi. Ullam voluptate odio magni quod voluptatem laborum mollitia eos temporibus!</p>
+  </div>
+  <div class="content">
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex assumenda expedita libero nesciunt vel non sequi reprehenderit asperiores suscipit, aperiam mollitia necessitatibus, aspernatur animi quod, molestias quas fugiat accusantium neque blanditiis saepe placeat labore enim fugit! Sunt sequi esse corrupti impedit harum molestias, quidem necessitatibus adipisci odit. Iure, magni perspiciatis.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magni inventore minima laudantium velit, officia praesentium ipsum explicabo debitis, quod ab!</p>
+  </div>
+  <div class="content">
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, iure ut eius sapiente fuga illum ab voluptatum, cumque reiciendis praesentium! Tempora suscipit quo quia, minima ipsa voluptas culpa quibusdam corporis!</p>
+  </div>
+  <div class="content">
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit facilis nulla placeat molestias et, accusantium, quam ut, odio asperiores sapiente eum. Ullam molestiae vitae, quam sit fugit fugiat sequi! Perspiciatis voluptates nihil necessitatibus quidem architecto quas facilis vero enim excepturi nulla, mollitia veniam quasi voluptatibus ipsa. Cum laborum modi dicta harum mollitia error quas minus, sapiente dolor quasi rem impedit facilis magni nisi consequatur eius animi quibusdam repellendus! Magnam et quibusdam tempora quidem qui eum, fugiat officiis eius, pariatur eveniet officia provident expedita impedit harum ad aperiam eligendi ullam, facere reiciendis mollitia natus! Voluptas magni, debitis voluptate id voluptatum quis!</p>
+  </div>
+</div>
+
+<div class="container mt-4">
+  <label for="exampleInputEmail1">Введите город</label>
+  <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Город">
+</div>
+<script>
+  var $navLink = $('.nav-link');
+  var $content = $('.content');
+  for (let i = 0; i < $navLink.length; i++) {
+    $($navLink[i]).on('click', replaceClass(i))
+  }
+  function replaceClass(i) {
+    return function() {
+      $('.nav-link.active').removeClass('active');
+      $(this).toggleClass('active');
+
+      $('.content.active').removeClass('active');
+      $($content[i]).toggleClass('active');
+    }
+  };
+
+  $('input').autocomplete({
+    source: ['geek', 'geekbrains', 'java', 'javascript', 'json']
+  })
+</script>
+</body>
+</html>
